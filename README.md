@@ -1,2 +1,5 @@
-# TEMPLATE-js-webpack
-Template for JavaScript webpack projects, mainly for TheOdinProject.
+# Todo List
+
+The Odin Project | Javascript | Project: Todo List
+
+https://www.theodinproject.com/lessons/node-path-javascript-todo-list

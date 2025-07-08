@@ -16,7 +16,7 @@
                 </ul>
                 <button class="newProjectBtn">New Project</button>
                 <dialog class="newProjectDialog">
-                    <p>Make new project</p>
+                    <p>Create new project</p>
                     <form method="dialog">
                         <label for="npName">Name:</label>
                         <input id="npName" type="text" required>
@@ -26,6 +26,28 @@
                 </dialog>
             </div>
             <div class="innerMain">
+                <div class="todoContainer"></div>
+                <button class="newTodoBtn">New Todo</button>
+                <dialog class="newTodoDialog">
+                    <p>Create new todo</p>
+                    <form method="dialog">
+                        <label for="ntTitle">Title:</label>
+                        <input id="ntTitle" type="text" required>
+                        <label for="ntDueDate">Due Date:</label>
+                        <input id="ntDueDate" type="date" required>
+                        <label for="ntPriority">Priority</label>
+                        <select id="ntPriority" required>
+                            <option value="" disabled selected>Choose one</option>
+                            <option value="1">!</option>
+                            <option value="2">!!</option>
+                            <option value="3">!!!</option>
+                        </select>
+                        <label for="ntDescription">Description</label>
+                        <input id="ntDescription" type="text">
+                        <button id="ntSave">Save</button>
+                        <button id="ntCancel">Cancel</button>
+                    </form>
+                </dialog>
             </div>
         </div>
     </div>

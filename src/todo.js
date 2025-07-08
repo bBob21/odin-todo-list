@@ -2,7 +2,7 @@ import {parse} from "date-fns";
 
 export class Todo {
     constructor(title, dueDate, priority, description){
-        this._id = crypto.randomUUID;
+        this._id = crypto.randomUUID();
         this.title = title;
         this.dueDate = dueDate;
         this.priority = priority;

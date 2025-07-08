@@ -1,40 +1,51 @@
 import {Project} from "./project.js";
 
 export function createEventSidebar(projectList){
-    const projectDialog = document.querySelector(".newProjectDialog");
+    const newProjectDialog = document.querySelector(".newProjectDialog");
     const newProjectBtn = document.querySelector(".newProjectBtn");
-    const submitProjectDialog = document.querySelector("#pSubmit");
-    const cancelProjectDialog = document.querySelector("#pCancel");
+    const saveNewProjectDialog = document.querySelector("#npSave");
+    const cancelNewProjectDialog = document.querySelector("#npCancel");
     
     newProjectBtn.addEventListener("click", () => {
         document.querySelectorAll(".newProjectDialog input").forEach(i => {
             i.value = ""
         })
-        projectDialog.showModal();
+        newProjectDialog.showModal();
     });
-    submitProjectDialog.addEventListener("click", () => {
-        let newProject = new Project(document.querySelector("#pName").value);
+    saveNewProjectDialog.addEventListener("click", () => {
+        let newProject = new Project(document.querySelector("#npName").value);
         projectList.push(newProject);
         render(projectList);
     })
-    cancelProjectDialog.addEventListener("click", () => {
+    cancelNewProjectDialog.addEventListener("click", () => {
         projectDialog.close();
     })
 }
 
 function renderSidebar(projectList){
     const sidebar = document.querySelector(".sidebar");
-    const projectContainer = document.querySelector(".sidebar ul");
+    const projectContainer = document.querySelector(".projectContainer");
     projectContainer.innerHTML = "";
     projectList.forEach(p => {
         let project = document.createElement("li");
         project.textContent = p.name;
         projectContainer.appendChild(project);
     });
+
     sidebar.appendChild(projectContainer)
 }
 
-export function render(projectList){
-    renderSidebar(projectList);
+function renderInnerMain(currProject){
     const innerMain = document.querySelector(".innerMain");
+    currProject.getTodoList.forEach(t => {
+        let todo = document.createElement("div");
+        todo.textContent = t.title;
+        innerMain.appendChild(todo);
+    });
+
+}
+
+export function render(projectList, currProject){
+    renderSidebar(projectList);
+    renderInnerMain(currProject);
 }

@@ -15,7 +15,6 @@ project1.addTodo(todo1);
 project1.addTodo(todo2);
 project1.addTodo(todo3);
 
-
 const project2 = new Project("name2pRoject2");
 project2.addTodo(todo4);
 projectList.push(project1, project2);

@@ -12,62 +12,45 @@
         <div class="sidebar">
           <ul class="projectContainer"></ul>
           <button class="newProjectBtn">New Project</button>
-          <dialog class="newProjectDialog">
-            <p>Create new project</p>
-            <form method="dialog">
-              <label for="npName">Name:</label>
-              <input id="npName" type="text" required />
-              <button id="npSave">Save</button>
-              <button id="npCancel">Cancel</button>
-            </form>
-          </dialog>
         </div>
         <div class="innerMain">
           <div class="todoContainer"></div>
           <button class="newTodoBtn">New Todo</button>
-          <dialog class="newTodoDialog">
-            <p>Create new todo</p>
-            <form method="dialog">
-              <label for="ntTitle">Title:</label>
-              <input id="ntTitle" type="text" required />
-              <label for="ntDueDate">Due Date:</label>
-              <input id="ntDueDate" type="date" required />
-              <label for="ntPriority">Priority</label>
-              <select id="ntPriority" required>
-                <option value="" disabled selected>Choose an option</option>
-                <option value="1">!</option>
-                <option value="2">!!</option>
-                <option value="3">!!!</option>
-              </select>
-              <label for="ntDescription">Description</label>
-              <input id="ntDescription" type="text" />
-              <button id="ntSave" type="submit">Save</button>
-              <button id="ntCancel">Cancel</button>
-            </form>
-          </dialog>
-          <dialog class="todoDialog">
-            <p>Edit current todo</p>
-            <form method="dialog">
-              <label for="tTitle">Title:</label>
-              <input id="tTitle" type="text" required />
-              <label for="tDueDate">Due Date:</label>
-              <input id="tDueDate" type="date" required />
-              <label for="tPriority">Priority:</label>
-              <select id="tPriority" required>
-                <option value="1">!</option>
-                <option value="2">!!</option>
-                <option value="3">!!!</option>
-              </select>
-              <label>Completion:</label>
-              <input id="tCompletion" type="checkbox">
-              <label for="tCompletion">Done</label>
-              <label for="tDescription">Description</label>
-              <input id="tDescription" type="text" />
-              <button id="tUpdate">Update</button>
-              <button id="tDelete">Delete</button>
-              <button id="tCancel">Cancel</button>
-            </form>
-          </dialog>
+
+          <div class="editDialogContainer"></div>
+          
+          <div class="newDialogContainer">
+            <dialog class="newProjectDialog">
+              <p>Create new project</p>
+              <form method="dialog">
+                <label for="npName">Name:</label>
+                <input id="npName" type="text" required />
+                <button id="npSave">Save</button>
+                <button id="npCancel">Cancel</button>
+              </form>
+            </dialog>
+            
+            <dialog class="newTodoDialog">
+              <p>Create new todo</p>
+              <form method="dialog">
+                <label for="ntTitle">Title:</label>
+                <input id="ntTitle" type="text" required />
+                <label for="ntDueDate">Due Date:</label>
+                <input id="ntDueDate" type="date" required />
+                <label for="ntPriority">Priority</label>
+                <select id="ntPriority" required>
+                  <option value="" disabled selected>Choose an option</option>
+                  <option value="1">!</option>
+                  <option value="2">!!</option>
+                  <option value="3">!!!</option>
+                </select>
+                <label for="ntDescription">Description</label>
+                <input id="ntDescription" type="text" />
+                <button id="ntSave" type="submit">Save</button>
+                <button id="ntCancel">Cancel</button>
+              </form>
+            </dialog>
+          </div>
         </div>
       </div>
     </div>

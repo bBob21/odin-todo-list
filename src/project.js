@@ -12,7 +12,7 @@ export class Project {
   }
   set name(n) {
     if (n == "") throw new Error("Project has an invalid name");
-    this._name = this.name;
+    this._name = n;
   }
   get getTodoList() {
     return this._todoList;

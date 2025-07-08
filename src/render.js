@@ -1,6 +1,6 @@
 import { Project } from "./project.js";
 import { Todo } from "./todo.js";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 
 export function createNewProjectDialog(projectList) {
   const newProjectDialog = document.querySelector(".newProjectDialog");
@@ -37,18 +37,69 @@ function renderProjects(projectList) {
       renderTodos(p);
       setCurrProject(p);
     });
-    project.appendChild(projectBtn);
+    let editProjectBtn = document.createElement("button");
+    editProjectBtn.textContent = "Edit";
+    editProjectBtn.addEventListener("click", () => {
+      editProjectDialog(projectList, p);
+    })
+    project.append(projectBtn, editProjectBtn);
     projectContainer.appendChild(project);
   });
 
   sidebar.appendChild(projectContainer);
 }
 
+function editProjectDialog(projectList, project){
+  const dialogContainer = document.querySelector(".editDialogContainer");
+  dialogContainer.innerHTML = `
+    <dialog class="editProjectDialog">
+      <p>Edit existing project</p>
+      <form method="dialog">
+        <label for="epName">Name:</label>
+        <input id="epName" type="text" required />
+        <button id="epUpdate">Update</button>
+        <button id="epDelete">Delete</button>
+        <button id="epCancel">Cancel</button>
+      </form>
+    </dialog>
+  `
+  const editProjectDialog = document.querySelector(".editProjectDialog");
+  const editProjectDialogUpdate = document.querySelector("#epUpdate");
+  const editProjectDialogCancel = document.querySelector("#epCancel");
+  const editProjectDialogDelete = document.querySelector("#epDelete");
+  const name = document.querySelector("#epName");
+  name.value = project.name;
+  editProjectDialogCancel.addEventListener("click", () => {
+    editProjectDialog.close();
+  })
+  editProjectDialogUpdate.addEventListener("click", () => {
+    
+    project.name = name.value;
+    console.log(name.value)
+    console.log(project.name)
+    console.log(projectList)
+    console.log(project)
+    renderProjects(projectList);
+  })
+  editProjectDialogDelete.addEventListener("click", () => {
+    console.log(project.id)
+    projectList = projectList.filter((p) => p.id !== project.id);
+    console.log(projectList)
+    console.log(project)
+    editProjectDialog.close();
+    renderProjects(projectList);
+    setCurrProject(projectList[0])
+    renderTodos(projectList[0])
+  })
+  editProjectDialog.showModal();
+}
+
 export function setCurrProject(selectedProject){
+  // TODO: make this work
     const projectContainer = document.querySelector(".projectContainer");
     let previousProjectID = projectContainer.dataset.currProjectID;
-    if (!!previousProjectID){
-      const previousProjectDOM = document.getElementById(previousProjectID);
+    let previousProjectDOM;
+    if (!!previousProjectID && !!(previousProjectDOM = document.getElementById(previousProjectID))){
       previousProjectDOM.classList.remove("currProject");
     }
 
@@ -67,38 +118,64 @@ function renderTodos(currProject) {
     let todoCard = document.createElement("div");
     todoCard.textContent = t.title + " " + format(t.dueDate, "dd MMM, yyyy - HH:mm");
 
-    let showTodoDialogBtn = document.createElement("button");
-    showTodoDialogBtn.textContent = "Show";
-    showTodoDialogBtn.addEventListener("click", () => {
-      showTodoDialog(currProject, t);
+    let editTodoDialogBtn = document.createElement("button");
+    editTodoDialogBtn.textContent = "Edit";
+    editTodoDialogBtn.addEventListener("click", () => {
+      editTodoDialog(currProject, t);
     })
-    todoBox.append(todoCard, showTodoDialogBtn)
+    todoBox.append(todoCard, editTodoDialogBtn)
     todoContainer.appendChild(todoBox);
   });
   const newTodoBtn = document.createElement("button");
   newTodoBtn.textContent = "New Todo";
 }
 
-function showTodoDialog(currProject, todo){
-  const todoDialog = document.querySelector(".todoDialog");
-  const todoDialogUpdate = document.querySelector("#tUpdate");
-  const todoDialogCancel = document.querySelector("#tCancel");
-  const todoDialogDelete = document.querySelector("#tDelete")
-  const title = document.querySelector("#tTitle");
-  const dueDate = document.querySelector("#tDueDate");
-  const priority = document.querySelector("#tPriority");
-  const completion = document.querySelector("#tCompletion");
-  const description = document.querySelector("#tDescription");
+function editTodoDialog(currProject, todo){
+  const dialogContainer = document.querySelector(".editDialogContainer");
+  dialogContainer.innerHTML = `
+    <dialog class="editTodoDialog">
+      <p>Edit existing todo</p>
+      <form method="dialog">
+        <label for="etTitle">Title:</label>
+        <input id="etTitle" type="text" required />
+        <label for="etDueDate">Due Date:</label>
+        <input id="etDueDate" type="date" required />
+        <label for="etPriority">Priority:</label>
+        <select id="etPriority" required>
+          <option value="1">!</option>
+          <option value="2">!!</option>
+          <option value="3">!!!</option>
+        </select>
+        <label>Completion:</label>
+        <input id="etCompletion" type="checkbox">
+        <label for="etCompletion">Done</label>
+        <label for="etDescription">Description</label>
+        <input id="etDescription" type="text" />
+        <button id="etUpdate">Update</button>
+        <button id="etDelete">Delete</button>
+        <button id="etCancel">Cancel</button>
+      </form>
+    </dialog>
+  `
+  const editTodoDialog = document.querySelector(".editTodoDialog");
+  const editTodoDialogUpdate = document.querySelector("#etUpdate");
+  const editTodoDialogCancel = document.querySelector("#etCancel");
+  const editTodoDialogDelete = document.querySelector("#etDelete")
+  const title = document.querySelector("#etTitle");
+  const dueDate = document.querySelector("#etDueDate");
+  const priority = document.querySelector("#etPriority");
+  const completion = document.querySelector("#etCompletion");
+  const description = document.querySelector("#etDescription");
   title.value = todo.title;
   dueDate.value = format(todo.dueDate, "yyyy-MM-dd");
   priority.value = todo.priority;
   if (todo.completion) completion.checked = true;
   description.value = todo.description;
 
-  todoDialogCancel.addEventListener("click", () => {
-    todoDialog.close();
+  editTodoDialogCancel.addEventListener("click", () => {
+    editTodoDialog.close();
   })
-  todoDialogUpdate.addEventListener("click", () => {
+  editTodoDialogUpdate.addEventListener("click", () => {
     todo.title = title.value;
     todo.dueDate = dueDate.value
     todo.priority = priority.value;
@@ -106,13 +183,12 @@ function showTodoDialog(currProject, todo){
     todo.completion =  completion.value;
     renderTodos(currProject);
   })
-  todoDialogDelete.addEventListener("click", () => {
+  editTodoDialogDelete.addEventListener("click", () => {
     currProject.removeTodo(todo);
-    todoDialog.close();
-    console.log(currProject)
+    editTodoDialog.close();
     renderTodos(currProject);
   })
-  todoDialog.showModal();
+  editTodoDialog.showModal();
 }
 
 export function createNewTodoDialog() {

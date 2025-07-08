@@ -1,7 +1,7 @@
 import "./styles.css";
 import { Todo } from "./todo.js";
 import { Project } from "./project.js";
-import { createEventSidebar, createNewTodo, render } from "./render.js";
+import { createNewProjectDialog, createNewTodoDialog, setCurrProject, render } from "./render.js";
 
 const projectList = [];
 window.projectList = projectList;
@@ -20,6 +20,7 @@ project2.addTodo(todo4);
 projectList.push(project1, project2);
 
 let currProject = projectList[0];
-createEventSidebar(projectList);
-createNewTodo(currProject);
+console.log(projectList)
+createNewProjectDialog(projectList);
+createNewTodoDialog();
 render(projectList, currProject);

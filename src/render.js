@@ -2,7 +2,7 @@ import { Project } from "./project.js";
 import { Todo } from "./todo.js";
 import { format, parse } from "date-fns";
 
-export function createEventSidebar(projectList) {
+export function createNewProjectDialog(projectList) {
   const newProjectDialog = document.querySelector(".newProjectDialog");
   const newProjectBtn = document.querySelector(".newProjectBtn");
   const newProjectDialogSave = document.querySelector("#npSave");
@@ -17,14 +17,14 @@ export function createEventSidebar(projectList) {
   newProjectDialogSave.addEventListener("click", () => {
     let newProject = new Project(document.querySelector("#npName").value);
     projectList.push(newProject);
-    renderSideBar(projectList);
+    renderProjects(projectList);
   });
   newProjectDialogCancel.addEventListener("click", () => {
     newProjectDialog.close();
   });
 }
 
-function renderSidebar(projectList) {
+function renderProjects(projectList) {
   const sidebar = document.querySelector(".sidebar");
   const projectContainer = document.querySelector(".projectContainer");
   projectContainer.innerHTML = "";
@@ -32,8 +32,10 @@ function renderSidebar(projectList) {
     let project = document.createElement("li");
     let projectBtn = document.createElement("button");
     projectBtn.textContent = p.name;
+    projectBtn.id = p.id;
     projectBtn.addEventListener("click", () => {
-      renderInnerMain(p);
+      renderTodos(p);
+      setCurrProject(p);
     });
     project.appendChild(projectBtn);
     projectContainer.appendChild(project);
@@ -42,30 +44,35 @@ function renderSidebar(projectList) {
   sidebar.appendChild(projectContainer);
 }
 
-function renderInnerMain(currProject) {
+export function setCurrProject(selectedProject){
+    const projectContainer = document.querySelector(".projectContainer");
+    let previousProjectID = projectContainer.dataset.currProjectID;
+    if (!!previousProjectID){
+      const previousProjectDOM = document.getElementById(previousProjectID);
+      previousProjectDOM.classList.remove("currProject");
+    }
+
+    projectContainer.dataset.currProjectID = selectedProject.id;
+    const selectedProjectDOM = document.getElementById(selectedProject.id)
+    selectedProjectDOM.classList.add("currProject");
+  }
+
+function renderTodos(currProject) {
   const todoContainer = document.querySelector(".todoContainer");
   todoContainer.innerHTML = "";
   currProject.getTodoList.forEach((t) => {
     let todoBox = document.createElement("div");
     todoBox.classList.add("todoBox");
 
-    let checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.id = t.id;
-    
-    let label = document.createElement("label");
-    label.htmlFor = t.id;
-
     let todoCard = document.createElement("div");
     todoCard.textContent = t.title + " " + format(t.dueDate, "dd MMM, yyyy - HH:mm");
-    label.appendChild(todoCard);
 
     let showTodoDialogBtn = document.createElement("button");
     showTodoDialogBtn.textContent = "Show";
     showTodoDialogBtn.addEventListener("click", () => {
       showTodoDialog(currProject, t);
     })
-    todoBox.append(checkbox, label, showTodoDialogBtn)
+    todoBox.append(todoCard, showTodoDialogBtn)
     todoContainer.appendChild(todoBox);
   });
   const newTodoBtn = document.createElement("button");
@@ -92,24 +99,23 @@ function showTodoDialog(currProject, todo){
     todoDialog.close();
   })
   todoDialogUpdate.addEventListener("click", () => {
-    console.log(dueDate.value)
     todo.title = title.value;
     todo.dueDate = dueDate.value
     todo.priority = priority.value;
     todo.description = description.value;
     todo.completion =  completion.value;
-    renderInnerMain(currProject);
+    renderTodos(currProject);
   })
   todoDialogDelete.addEventListener("click", () => {
     currProject.removeTodo(todo);
     todoDialog.close();
     console.log(currProject)
-    renderInnerMain(currProject);
+    renderTodos(currProject);
   })
   todoDialog.showModal();
 }
 
-export function createNewTodo(currProject) {
+export function createNewTodoDialog() {
   const newTodoDialog = document.querySelector(".newTodoDialog");
   const newTodoBtn = document.querySelector(".newTodoBtn");
   const newTodoDialogForm = document.querySelector(".newTodoDialog form");
@@ -123,6 +129,9 @@ export function createNewTodo(currProject) {
     newTodoDialog.showModal();
   });
   newTodoDialogForm.addEventListener("submit", () => {
+    let currProjectID = document.querySelector(".projectContainer").dataset.currProjectID;
+    let currProject = projectList.find(p => p.id == currProjectID);
+
     let title = document.querySelector("#ntTitle").value;
     let dueDate = document.querySelector("#ntDueDate").value;
     let priority = document.querySelector("#ntPriority").value;
@@ -130,7 +139,7 @@ export function createNewTodo(currProject) {
 
     let newTodo = new Todo(title, dueDate, priority, description);
     currProject.addTodo(newTodo);
-    renderInnerMain(currProject);
+    renderTodos(currProject);
   });
   newTodoDialogCancel.addEventListener("click", () => {
     newTodoDialog.close();
@@ -138,6 +147,9 @@ export function createNewTodo(currProject) {
 }
 
 export function render(projectList, currProject) {
-  renderSidebar(projectList);
-  renderInnerMain(currProject);
+  renderProjects(projectList);
+
+  setCurrProject(currProject);
+  renderTodos(currProject);
+  
 }

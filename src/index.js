@@ -6,10 +6,10 @@ import { createEventSidebar, createNewTodo, render } from "./render.js";
 const projectList = [];
 window.projectList = projectList;
 
-const todo1 = new Todo("todoTitle", "01/01/2026");
-const todo2 = new Todo("secondDoing", "01/03/2024");
-const todo3 = new Todo("thirdTo", "10/11/2020");
-const todo4 = new Todo("444444d", "12/12/2012");
+const todo1 = new Todo("todoTitle", "2026-01-01",2);
+const todo2 = new Todo("secondDoing", "2024-03-01",1, "long ddescription abt the todo");
+const todo3 = new Todo("thirdTo", "2020-11-10",3, "dsescdesc");
+const todo4 = new Todo("444444d", "2012-12-12",3);
 const project1 = new Project("ProJect_Name");
 project1.addTodo(todo1);
 project1.addTodo(todo2);

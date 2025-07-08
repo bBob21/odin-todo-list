@@ -22,7 +22,7 @@ export class Project {
   }
   removeTodo(todo) {
     this._todoList = this.getTodoList.filter((t) => {
-      t.id !== todo.id;
+       return t.id !== todo.id;
     });
   }
 }

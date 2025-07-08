@@ -6,6 +6,7 @@ export class Todo {
     this.title = title;
     this.dueDate = dueDate;
     this.priority = priority;
+    if (description == undefined) description = "";
     this.description = description;
     this.completion = false;
   }
@@ -29,7 +30,7 @@ export class Todo {
     return this._dueDate;
   }
   set dueDate(dd) {
-    this._dueDate = parse(dd, "dd/MM/yyyy", new Date());
+    this._dueDate = parse(dd, "yyyy-MM-dd", new Date());
   }
   get priority() {
     return this._priority;

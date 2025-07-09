@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+  <script defer src="main.js"></script></head>
+  <body>
+    <div class="container">
+      <div class="header">Do Todo</div>
+      <div class="main">
+        <div class="sidebar">
+          <ul class="projectContainer"></ul>
+          <button class="newProjectBtn">New Project</button>
+        </div>
+        <div class="innerMain">
+          <div class="todoContainer"></div>
+          <button class="newTodoBtn">New Todo</button>
+
+          <div class="editDialogContainer"></div>
+          
+          <div class="newDialogContainer">
+            <dialog class="newProjectDialog">
+              <p>Create new project</p>
+              <form method="dialog">
+                <label for="npName">Name:</label>
+                <input id="npName" type="text" required />
+                <button id="npSave" class="twoColumnsWide">Save</button>
+                <button id="npCancel" class="twoColumnsWide">Cancel</button>
+              </form>
+            </dialog>
+            
+            <dialog class="newTodoDialog">
+              <p>Create new todo</p>
+              <form method="dialog">
+                <label for="ntTitle">Title:</label>
+                <input id="ntTitle" type="text" required />
+                <label for="ntDueDate">Due Date:</label>
+                <input id="ntDueDate" type="date" required />
+                <label for="ntPriority">Priority:</label>
+                <select id="ntPriority" required>
+                  <option value="" disabled selected>Choose an option</option>
+                  <option value="1">!</option>
+                  <option value="2">!!</option>
+                  <option value="3">!!!</option>
+                </select>
+                <label for="ntDescription">Description:</label>
+                <textarea id="ntDescription"></textarea>
+                <button id="ntSave" class="twoColumnsWide" type="submit">Save</button>
+                <button id="ntCancel" class="twoColumnsWide">Cancel</button>
+              </form>
+            </dialog>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

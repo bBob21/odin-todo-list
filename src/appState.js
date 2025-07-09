@@ -25,10 +25,8 @@ class AppState {
   loadLocalStorage(){
     let data = localStorage.getItem("projectList")
     if (!data){
-      console.log("LOAD FAIL")
       return false;
     }
-    console.log("LOAD SUC")
     this.currProjectID = localStorage.getItem("currProjectID");
     this.projectList = JSON.parse(data).map((project) => {
       const newProject = new Project(project.name, project.id);
@@ -41,8 +39,6 @@ class AppState {
           todo.completion,
           todo.id
         );
-        console.log("TODO")
-        console.log(newTodo)
         return newTodo;
       });
       console.log("PROJECT")

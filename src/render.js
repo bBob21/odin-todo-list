@@ -101,9 +101,6 @@ export function highlightCurrProject(appState){
 
 function renderTodos(appState) {
   appState.saveLocalStorage();
-  console.log("==================================")
-  console.log(appState.getCurrProject().todoList)
-  console.log("==================================")
   const todoContainer = document.querySelector(".todoContainer");
   todoContainer.innerHTML = "";
   appState.getCurrProject().todoList.forEach((t) => {

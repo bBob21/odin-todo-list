@@ -41,8 +41,6 @@ class AppState {
         );
         return newTodo;
       });
-      console.log("PROJECT")
-      console.log(newProject)
       return newProject;
     });
     return true;

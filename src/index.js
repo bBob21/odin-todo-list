@@ -7,16 +7,16 @@ import { appState } from "./appState.js";
 const projectList = [];
 window.projectList = projectList;
 
-const todo1 = new Todo("todoTitle", "2026-01-01",2);
-const todo2 = new Todo("secondDoing", "2024-03-01",1, "long ddescription abt the todo");
-const todo3 = new Todo("thirdTo", "2020-11-10",3, "dsescdesc");
-const todo4 = new Todo("444444d", "2012-12-12",3);
-const project1 = new Project("ProJect_Name");
+const project1 = new Project("House Things")
+const todo1 = new Todo("Clean Up Room", "2025-07-20", 1, "Maybe buy vacuum");
+const todo2 = new Todo("Groceries", "2025-07-10", 3, "Milk, Bread, Chicken, MSG, Oil, Spinach, Potatoes");
+const todo3 = new Todo("Fix TV", "2025-08-01", 1, "Probably hire someone else");
 project1.addTodo(todo1);
 project1.addTodo(todo2);
 project1.addTodo(todo3);
 
-const project2 = new Project("name2pRoject2");
+const project2 = new Project("The Odin Project");
+const todo4 = new Todo("Code Todo list app", "2025-07-09", 2, "Create JS application to keep track of Todos grouped by Projects")
 project2.addTodo(todo4);
 projectList.push(project1, project2);
 

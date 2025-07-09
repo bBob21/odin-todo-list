@@ -25,6 +25,7 @@ export function createNewProjectDialog(appState) {
 }
 
 function renderProjects(appState) {
+  appState.saveLocalStorage();
   const sidebar = document.querySelector(".sidebar");
   const projectContainer = document.querySelector(".projectContainer");
   projectContainer.innerHTML = "";
@@ -99,9 +100,13 @@ export function highlightCurrProject(appState){
   }
 
 function renderTodos(appState) {
+  appState.saveLocalStorage();
+  console.log("==================================")
+  console.log(appState.getCurrProject().todoList)
+  console.log("==================================")
   const todoContainer = document.querySelector(".todoContainer");
   todoContainer.innerHTML = "";
-  appState.getCurrProject().getTodoList.forEach((t) => {
+  appState.getCurrProject().todoList.forEach((t) => {
     let todoBox = document.createElement("div");
     todoBox.classList.add("todoBox");
 
@@ -190,7 +195,7 @@ export function createNewTodoDialog(appState) {
   const newTodoDialogCancel = document.querySelector("#ntCancel");
 
   newTodoBtn.addEventListener("click", () => {
-    document.querySelectorAll(".newTodoDialog input").forEach((i) => {
+    document.querySelectorAll(".newTodoDialog input, .newTodoDialog textarea").forEach((i) => {
       i.value = "";
     });
     document.querySelector(".newTodoDialog select").value = "";

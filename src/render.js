@@ -2,7 +2,7 @@ import { Project } from "./project.js";
 import { Todo } from "./todo.js";
 import { format } from "date-fns";
 
-export function createNewProjectDialog(projectList) {
+export function createNewProjectDialog(appState) {
   const newProjectDialog = document.querySelector(".newProjectDialog");
   const newProjectBtn = document.querySelector(".newProjectBtn");
   const newProjectDialogSave = document.querySelector("#npSave");
@@ -16,40 +16,41 @@ export function createNewProjectDialog(projectList) {
   });
   newProjectDialogSave.addEventListener("click", () => {
     let newProject = new Project(document.querySelector("#npName").value);
-    projectList.push(newProject);
-    renderProjects(projectList);
+    appState.projectList.push(newProject);
+    renderProjects(appState);
   });
   newProjectDialogCancel.addEventListener("click", () => {
     newProjectDialog.close();
   });
 }
 
-function renderProjects(projectList) {
+function renderProjects(appState) {
   const sidebar = document.querySelector(".sidebar");
   const projectContainer = document.querySelector(".projectContainer");
   projectContainer.innerHTML = "";
-  projectList.forEach((p) => {
-    let project = document.createElement("li");
+  appState.projectList.forEach((p) => {
+    let projectBox = document.createElement("li");
+    projectBox.id = p.id;
     let projectBtn = document.createElement("button");
     projectBtn.textContent = p.name;
-    projectBtn.id = p.id;
     projectBtn.addEventListener("click", () => {
-      renderTodos(p);
-      setCurrProject(p);
+      appState.currProjectID = p.id;
+      renderTodos(appState);
+      highlightCurrProject(appState);
     });
     let editProjectBtn = document.createElement("button");
     editProjectBtn.textContent = "Edit";
     editProjectBtn.addEventListener("click", () => {
-      editProjectDialog(projectList, p);
+      editProjectDialog(appState, p);
     })
-    project.append(projectBtn, editProjectBtn);
-    projectContainer.appendChild(project);
+    projectBox.append(projectBtn, editProjectBtn);
+    projectContainer.appendChild(projectBox);
   });
 
   sidebar.appendChild(projectContainer);
 }
 
-function editProjectDialog(projectList, project){
+function editProjectDialog(appState, project){
   const dialogContainer = document.querySelector(".editDialogContainer");
   dialogContainer.innerHTML = `
     <dialog class="editProjectDialog">
@@ -73,45 +74,34 @@ function editProjectDialog(projectList, project){
     editProjectDialog.close();
   })
   editProjectDialogUpdate.addEventListener("click", () => {
-    
     project.name = name.value;
-    console.log(name.value)
-    console.log(project.name)
-    console.log(projectList)
-    console.log(project)
-    renderProjects(projectList);
+    renderProjects(appState);
   })
   editProjectDialogDelete.addEventListener("click", () => {
-    console.log(project.id)
-    projectList = projectList.filter((p) => p.id !== project.id);
-    console.log(projectList)
-    console.log(project)
+    appState.projectList = appState.projectList.filter((p) => p.id !== project.id);
     editProjectDialog.close();
-    renderProjects(projectList);
-    setCurrProject(projectList[0])
-    renderTodos(projectList[0])
+    if (project === appState.getCurrProject()){
+      appState.currProjectID = appState.projectList[0].id; // TODO: what if delete last project in list
+    }
+    renderProjects(appState);
+    highlightCurrProject(appState)
+    renderTodos(appState)
   })
   editProjectDialog.showModal();
 }
 
-export function setCurrProject(selectedProject){
-  // TODO: make this work
-    const projectContainer = document.querySelector(".projectContainer");
-    let previousProjectID = projectContainer.dataset.currProjectID;
-    let previousProjectDOM;
-    if (!!previousProjectID && !!(previousProjectDOM = document.getElementById(previousProjectID))){
-      previousProjectDOM.classList.remove("currProject");
-    }
-
-    projectContainer.dataset.currProjectID = selectedProject.id;
-    const selectedProjectDOM = document.getElementById(selectedProject.id)
-    selectedProjectDOM.classList.add("currProject");
+export function highlightCurrProject(appState){
+    const projectBoxes = document.querySelectorAll(".projectContainer > li");
+    projectBoxes.forEach(p => {
+      let isSelected = (p.id === appState.currProjectID);
+      p.classList.toggle("currProject", isSelected);
+    });
   }
 
-function renderTodos(currProject) {
+function renderTodos(appState) {
   const todoContainer = document.querySelector(".todoContainer");
   todoContainer.innerHTML = "";
-  currProject.getTodoList.forEach((t) => {
+  appState.getCurrProject().getTodoList.forEach((t) => {
     let todoBox = document.createElement("div");
     todoBox.classList.add("todoBox");
 
@@ -121,7 +111,7 @@ function renderTodos(currProject) {
     let editTodoDialogBtn = document.createElement("button");
     editTodoDialogBtn.textContent = "Edit";
     editTodoDialogBtn.addEventListener("click", () => {
-      editTodoDialog(currProject, t);
+      editTodoDialog(appState, t);
     })
     todoBox.append(todoCard, editTodoDialogBtn)
     todoContainer.appendChild(todoBox);
@@ -130,7 +120,7 @@ function renderTodos(currProject) {
   newTodoBtn.textContent = "New Todo";
 }
 
-function editTodoDialog(currProject, todo){
+function editTodoDialog(appState, todo){
   const dialogContainer = document.querySelector(".editDialogContainer");
   dialogContainer.innerHTML = `
     <dialog class="editTodoDialog">
@@ -181,17 +171,17 @@ function editTodoDialog(currProject, todo){
     todo.priority = priority.value;
     todo.description = description.value;
     todo.completion =  completion.value;
-    renderTodos(currProject);
+    renderTodos(appState);
   })
   editTodoDialogDelete.addEventListener("click", () => {
-    currProject.removeTodo(todo);
+    appState.getCurrProject().removeTodo(todo);
     editTodoDialog.close();
-    renderTodos(currProject);
+    renderTodos(appState);
   })
   editTodoDialog.showModal();
 }
 
-export function createNewTodoDialog() {
+export function createNewTodoDialog(appState) {
   const newTodoDialog = document.querySelector(".newTodoDialog");
   const newTodoBtn = document.querySelector(".newTodoBtn");
   const newTodoDialogForm = document.querySelector(".newTodoDialog form");
@@ -205,27 +195,23 @@ export function createNewTodoDialog() {
     newTodoDialog.showModal();
   });
   newTodoDialogForm.addEventListener("submit", () => {
-    let currProjectID = document.querySelector(".projectContainer").dataset.currProjectID;
-    let currProject = projectList.find(p => p.id == currProjectID);
-
     let title = document.querySelector("#ntTitle").value;
     let dueDate = document.querySelector("#ntDueDate").value;
     let priority = document.querySelector("#ntPriority").value;
     let description = document.querySelector("#ntDescription").value;
 
     let newTodo = new Todo(title, dueDate, priority, description);
-    currProject.addTodo(newTodo);
-    renderTodos(currProject);
+    appState.getCurrProject().addTodo(newTodo);
+    renderTodos(appState);
   });
   newTodoDialogCancel.addEventListener("click", () => {
     newTodoDialog.close();
   });
 }
 
-export function render(projectList, currProject) {
-  renderProjects(projectList);
-
-  setCurrProject(currProject);
-  renderTodos(currProject);
+export function render(appState) {
+  renderProjects(appState);
+  highlightCurrProject(appState);
+  renderTodos(appState);
   
 }

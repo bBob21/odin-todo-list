@@ -2,6 +2,7 @@ import "./styles.css";
 import { Todo } from "./todo.js";
 import { Project } from "./project.js";
 import { createNewProjectDialog, createNewTodoDialog, setCurrProject, render } from "./render.js";
+import { appState } from "./appState.js";
 
 const projectList = [];
 window.projectList = projectList;
@@ -19,8 +20,9 @@ const project2 = new Project("name2pRoject2");
 project2.addTodo(todo4);
 projectList.push(project1, project2);
 
-let currProject = projectList[0];
-console.log(projectList)
-createNewProjectDialog(projectList);
-createNewTodoDialog();
-render(projectList, currProject);
+appState.currProjectID = projectList[0].id;
+appState.projectList = projectList;
+console.log(appState)
+createNewProjectDialog(appState);
+createNewTodoDialog(appState);
+render(appState);

@@ -35,3 +35,18 @@ html, body{
 .currProject{
     background-color:pink;
 }
+
+dialog{
+    text-align: center;
+}
+
+dialog > form {
+    text-align: left;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:12px;
+}
+
+.twoColumnsWide{
+    grid-column: 1 /3;
+}

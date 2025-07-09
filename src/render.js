@@ -60,7 +60,7 @@ function editProjectDialog(appState, project){
         <input id="epName" type="text" required />
         <button id="epUpdate">Update</button>
         <button id="epDelete">Delete</button>
-        <button id="epCancel">Cancel</button>
+        <button id="epCancel" class="twoColumnsWide">Cancel</button>
       </form>
     </dialog>
   `
@@ -137,13 +137,15 @@ function editTodoDialog(appState, todo){
           <option value="3">!!!</option>
         </select>
         <label>Completion:</label>
-        <input id="etCompletion" type="checkbox">
-        <label for="etCompletion">Done</label>
-        <label for="etDescription">Description</label>
-        <input id="etDescription" type="text" />
+        <div>
+          <input id="etCompletion" type="checkbox">
+          <label for="etCompletion">Done</label>
+        </div>
+        <label for="etDescription">Description:</label>
+        <textarea id="etDescription"></textarea>
         <button id="etUpdate">Update</button>
         <button id="etDelete">Delete</button>
-        <button id="etCancel">Cancel</button>
+        <button id="etCancel" class="twoColumnsWide">Cancel</button>
       </form>
     </dialog>
   `
